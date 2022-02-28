@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"github.com/Hind3ight/OceanLearn/model"
+	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -10,12 +11,12 @@ import (
 var DB *gorm.DB
 
 func initDB() *gorm.DB {
-	host := "localhost"
-	port := 3306
-	database := "ginDB"
-	username := "root"
-	password := "123456"
-	charset := "utf8"
+	host := viper.GetString("Mysql.host")
+	port := viper.GetInt("Mysql.port")
+	database := viper.GetString("Mysql.database")
+	username := viper.GetString("Mysql.username")
+	password := viper.GetString("Mysql.password")
+	charset := viper.GetString("Mysql.charset")
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%v)/%s?charset=%s&parseTime=True&loc=Local",
 		username,
 		password,

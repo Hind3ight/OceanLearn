@@ -1,4 +1,4 @@
-package lib
+package responseUtils
 
 import (
 	"github.com/gin-gonic/gin"
