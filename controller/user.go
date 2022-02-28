@@ -5,6 +5,7 @@ import (
 	"github.com/Hind3ight/OceanLearn/pkg/lib"
 	"github.com/Hind3ight/OceanLearn/pkg/model"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -34,15 +35,31 @@ func Register(c *gin.Context) {
 		name = lib.RandomString(10)
 	}
 
-	user := model.User{
-		Name:      name,
-		Telephone: telephone,
-		Password:  password,
+	if isTelephoneExist(DB, telephone) {
+		c.JSON(200, gin.H{
+			"message": "手机号已存在",
+		})
+		return
+	} else {
+		user := model.User{
+			Name:      name,
+			Telephone: telephone,
+			Password:  password,
+		}
+		DB.Create(&user)
 	}
-	DB.Create(&user)
 
 	c.JSON(200, gin.H{
 		"message": "注册成功",
 		"name":    name,
 	})
+}
+
+func isTelephoneExist(db *gorm.DB, telephone string) bool {
+	var user model.User
+	db.Where("telephone = ?", telephone).First(&user)
+	if user.ID != 0 {
+		return true
+	}
+	return false
 }
