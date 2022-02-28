@@ -2,7 +2,7 @@ package common
 
 import (
 	"fmt"
-	"github.com/Hind3ight/OceanLearn/pkg/model"
+	"github.com/Hind3ight/OceanLearn/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

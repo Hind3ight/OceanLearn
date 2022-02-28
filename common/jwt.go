@@ -2,7 +2,7 @@ package common
 
 import (
 	"errors"
-	"github.com/Hind3ight/OceanLearn/pkg/model"
+	"github.com/Hind3ight/OceanLearn/model"
 	"github.com/dgrijalva/jwt-go"
 	"time"
 )
