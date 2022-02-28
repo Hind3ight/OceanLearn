@@ -5,6 +5,7 @@ import (
 	"github.com/Hind3ight/OceanLearn/pkg/lib"
 	"github.com/Hind3ight/OceanLearn/pkg/model"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"net/http"
 )
@@ -41,10 +42,18 @@ func Register(c *gin.Context) {
 		})
 		return
 	} else {
+		hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"code":    500,
+				"message": "加密错误",
+			})
+		}
+
 		newUser := model.User{
 			Name:      name,
 			Telephone: telephone,
-			Password:  password,
+			Password:  string(hash),
 		}
 		DB.Create(&newUser)
 	}
@@ -86,7 +95,8 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	if user.Password != password {
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"code":    422,
 			"message": "密码错误",
