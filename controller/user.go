@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"log"
 	"net/http"
 )
 
@@ -104,12 +105,29 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token := "11"
+	token, err := common.GenToken(user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "token生成失败",
+		})
+		log.Printf("token generate error:%s ", err)
+		return
+	}
 
 	c.JSON(200, gin.H{
 		"code":    200,
 		"data":    gin.H{"token": token},
 		"message": "登录成功",
+	})
+}
+
+func Info(c *gin.Context) {
+	username, _ := c.Get("user")
+	c.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"data":    gin.H{"user": username},
+		"message": "success",
 	})
 }
 
