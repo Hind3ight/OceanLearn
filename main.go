@@ -50,7 +50,7 @@ func main() {
 			"name":    name,
 		})
 	})
-	r.Run() // 监听并在 0.0.0.0:8080 上启动服务
+	r.Run(":8082") // 监听并在 0.0.0.0:8080 上启动服务
 }
 
 func InitDB() *gorm.DB {
